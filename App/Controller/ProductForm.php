@@ -25,17 +25,9 @@ class Productform
         try {
             $id = (int) $param['id'];
             Transaction::open(DATABASE);
-            // $type_products = TypeProduct::all(); 
             $this->data = Product::find($id);           
             Transaction::close();
-            
-            // $select_type_products = "<option value='0'> Selecione um Produto </option>";
-            // foreach ($type_products as $type_product) {
-            //     $product_id   = $type_product['id'];
-            //     $description = $type_product['description'];                
-            //     $select_type_products .= "<option value='{$product_id}'> {$description} </option>";
-            // }
-            // $this->data['combo_type_products'] = $select_type_products;
+
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -91,8 +83,5 @@ class Productform
         $this->html = str_replace('{value}', $this->data['value'], $this->html);
         $this->html = str_replace('{combo_type_products}', $this->data['combo_type_products'], $this->html);    
         echo $this->html;
-    }
-    
+    }    
 }
-
-
