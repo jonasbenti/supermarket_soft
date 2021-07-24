@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de tipo de produto</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body style="text-align:center">
+    <div id="appTable" class="table-responsive" height="100%" width="100%">
+    <div class="panel panel-primary">
+        <div class="panel-heading" style="text-align: center">Lista de tipo de produtos</div>
+    </div>
+    <button onclick="window.location='index.php?class=TypeProductForm'" class="btn btn-success">
+        Inserir tipo de produto
+    </button>
+    <button onclick="window.location='index.php?class=InitList'" class="btn btn-info">
+        Voltar a tela inicial
+    </button>
+</div>
+<table class="table table-striped">
+<thead class="thead-dark">
+    <tr>
+    <td></td>
+    <td><b>Id</b></td>
+    <td><b>Descrição</b></td>
+    <td><b>Imposto(%)</b></td>
+    </tr>
+</thead>
+<tbody class="Table table-striped table-bordered table-hover">
+    {items}
+</tbody>        
+</table>
+</body>
+</html>
