@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de tipo de produto {id}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="panel panel-primary">
+    <div class="panel-heading" style="text-align: center">Formulário de tipo de produto <b>{id}</b></div>
+</div>    
+<form enctype="multipart/form-data"  method="post" action="index.php?class=TypeProductFormList&method=save">
+    <div class="container">
+        <input id="id" name="id" type="hidden" value="{id}">
+        <div class="form-group col-md-6">
+            <label>Descrição</label>
+            <input name="description" class="form-control" type="text" style="width: 50%"
+             value="{description}" required>
+            <br>
+        </div>
+            
+        <div class="form-group col-md-3">
+            <label>Imposto(%)</label>
+            <input name="tax_percentage" class="form-control" type="text" style="width: 50%"
+             value="{tax_percentage}" required>
+            <br>
+        </div>
+    </div>
+    <div id="panel_include" class="panel panel-primary">
+        <div class="panel-heading" style="text-align: center">Ações</div>
+    </div>     
+    <div class="container" style="text-align: center">
+        <a href="index.php?class=TypeProductFormList" class="btn btn-primary"> Novo Tipo de produto</a>
+        <input type="submit" class="btn btn-success" value="Incluir/Editar">
+        <a href="index.php" class="btn btn-info"> Voltar ao início</a>
+    </div>
+    <br>
+    <div id="panel_include" class="panel panel-primary">
+        <div class="panel-heading" style="text-align: center">Listagem de Produtos</div>
+    </div>      
+</form>    
+<table class="table table-striped table-bordered table-hover">
+    <thead class="thead-dark">
+        <tr>
+        <td></td>
+        <td><b>Id</b></td>
+        <td><b>Descrição</b></td>
+        <td><b>Imposto(%)</b></td>
+        </tr>
+    </thead>
+    <tbody class="Table table-striped table-bordered table-hover">
+        {items}
+    </tbody>        
+</table>
+
+</body>
+</html>

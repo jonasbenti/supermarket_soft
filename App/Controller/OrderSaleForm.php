@@ -57,9 +57,9 @@ class OrderSaleForm
 
             $select_products = "<option selected=1 value='0'> Selecione um Produto </option>";
             foreach ($products as $product) {
-                $values_product = $product['id']."_|_".$product['description']."_|_".$product['value']."_|_".$product['tax_percetage'];
-                $description = $product['description'];                
-                $select_products .= "<option value='{$values_product}'> {$description} </option>";
+                $values_product = $product['id'];
+                $description = $product['description']." - imp: (".(str_replace(".",",",$product['tax_percetage'])."%)");                
+                $select_products .= "<option value='{$values_product}' data-price='{$product['value']}' data-tax_percentage='{$product['tax_percetage']}'> {$description} </option>";
             }
             $this->data['combo_products'] = $select_products;
         } catch (Exception $e) {
