@@ -9,30 +9,30 @@
 </head>
 <body style="text-align:center">
     <div id="appTable" class="table-responsive" height="100%" width="100%">
-    <div class="panel panel-primary">
-        <div class="panel-heading" style="text-align: center">Lista de pedidos</div>
+        <div class="panel panel-primary">
+            <div class="panel-heading" style="text-align: center">Lista de pedidos</div>
+        </div>
+        <button onclick="window.location='index.php?class=OrderSaleForm'" class="btn btn-success">
+            Criar pedido
+        </button>
+        <button onclick="window.location='index.php?class=InitList'" class="btn btn-info">
+            Voltar a tela inicial
+        </button>
     </div>
-    <button onclick="window.location='index.php?class=OrderSaleForm'" class="btn btn-success">
-        Criar pedido
-    </button>
-    <button onclick="window.location='index.php?class=InitList'" class="btn btn-info">
-        Voltar a tela inicial
-    </button>
-</div>
-<br>
-<table class="table table-striped table-bordered table-hover">
-<thead class="thead-dark">
-    <tr>
-    <td></td>
-    <td><b>Id</b></td>
-    <td><b>Data</b></td>
-    <td><b>V. Total</b></td>
-    <td><b>V. Total Imp.</b></td>
-    </tr>
-</thead>
-<tbody class="Table table-striped table-bordered table-hover">
-    {items}
-</tbody>        
-</table>
+    <br>
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+            <td></td>
+            <td><b>Id</b></td>
+            <td><b>Data</b></td>
+            <td><b>V. Total</b></td>
+            <td><b>V. Total Imp.</b></td>
+            </tr>
+        </thead>
+        <tbody class="Table table-striped table-bordered table-hover">
+            {items}
+        </tbody>
+    </table>
 </body>
 </html>

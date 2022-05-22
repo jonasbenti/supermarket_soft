@@ -9,74 +9,83 @@
     <!-- <script type="text/javascript" src="./View/js/process_order_sale.js"></script>
     <script src="process_order_sale1.js"></script> -->
 </head>
-<body>  
+<body>
     <div class="panel panel-primary">
         <div class="panel-heading" style="text-align: center">Pedido <b>{order_id}</b></div>
-    </div>  
+    </div>
     <form enctype="multipart/form-data" method="post" action="index.php?class=OrderSaleForm&method=save">
         <input id="order_id" name="order_id" type="hidden" value="{order_id}">
         <div class="container">
             <div class="form-group col-md-4">
                 <label>Data</label>
-                <input name="order_date" id="order_date" class="form-control" type="text" 
+                <input name="order_date" id="order_date" class="form-control" type="text"
                     value="{order_date}" style="width: 30%" required>
-            </div>    
+            </div>
+
             <div class="form-group col-md-3">
                 <label>Valor Total</label>
                 <input name="order_total" id="order_total" class="form-control" type="text" 
                 style="width: 30%" value="0" readonly="1">
             </div>
+
             <div class="form-group col-md-3">
                 <label>Valor Total de imposto</label>
-                <input name="order_total_tax" id="order_total_tax" class="form-control" type="text" 
+                <input name="order_total_tax" id="order_total_tax" class="form-control" type="text"
                 style="width: 30%" value="0" readonly="1">
             </div>
-        </div>        
+        </div>
+
         <div id="panel_include" class="panel panel-primary">
             <div class="panel-heading" style="text-align: center">Incluir produto</div>
         </div>
+
         <div id="div_alert" class="container">
             <div class="alert alert-success alert-dismissible">
                 <label id="label_alert"></label>
                 <button type="button" class="close" onclick="showHideDiv(div_alert)">&times;</button>
             </div>
         </div>
+
         <div id="div_include" class="container">
             <div class="container">
                 <div class="form-group col-md-3">
                     <label>Produto</label>
                     <select class="form-control" size="1" id="product_item" 
                     name="product_item" onchange="findProduct()">
-                        {combo_products}             
+                        {combo_products}
                     </select>
                 </div>
+
                 <div class="form-group col-md-4">
                     <label>Qtd</label>
                     <input id="quantity_item" name="quantity_item" class="form-control"
-                    type="number" style="width: 30%" value="1" onblur="calcTotal()" min="1">                    
+                    type="number" style="width: 30%" value="1" onblur="calcTotal()" min="1">
                 </div>
             </div>
+
             <div class="container">
                 <div class="form-group col-md-4">
                     <label>Preço</label>
                     <input id="price_item" name="price_item" class="form-control"
-                    type="number" style="width: 30%" value="0" readonly="1">                    
+                    type="number" style="width: 30%" value="0" readonly="1">
                 </div>
+
                 <div class="form-group col-md-4">
                     <label>Total</label>
                     <input id="total_item" name="total_item" class="form-control"
-                    type="number" style="width: 30%" value="0" readonly="1">                    
-                </div> 
+                    type="number" style="width: 30%" value="0" readonly="1">
+                </div>
+
                 <div class="form-group col-md-4">
                     <label>Total Imp.</label>
                     <input id="total_tax_item" name="total_tax_item" class="form-control"
-                    type="number" style="width: 30%" value="0" readonly="1">                    
+                    type="number" style="width: 30%" value="0" readonly="1">
                 </div>
             </div>
-            <input id="order_items" name="order_items" type="hidden" value="">            
+            <input id="order_items" name="order_items" type="hidden" value="">
         </div>
         <div class="panel panel-primary">
-                <div class="panel-heading" style="text-align: center">Opções</div>              
+            <div class="panel-heading" style="text-align: center">Opções</div>
         </div>
         <div style="text-align: center">
             <button type="button" id="btn_add" onclick="addItem()" class="btn btn-primary" href="#panel_include">Add produto</button>
@@ -84,7 +93,7 @@
             <input type="submit" id="btn_submit" class="btn btn-success" onclick="endOrderSale()" value="Finalizar Pedido">
             <button type="button" id="btn_clear" onclick="clearOrderSaleTotalsItems()" class="btn btn-danger">Limpar itens</button>
         </div>
-    </form>    
+    </form>
     <br>
     <div id="div_order_items" class="panel panel-primary">
         <div class="panel-heading" style="text-align: center">Itens do pedido</div>
@@ -119,10 +128,10 @@
         var order_total = document.getElementById("order_total");
         var order_total_tax = document.getElementById("order_total_tax");
         var product_item = document.getElementById("product_item");
-        var quantity_item = document.getElementById("quantity_item");  
+        var quantity_item = document.getElementById("quantity_item");
         var price_item = document.getElementById("price_item");
         var total_item = document.getElementById("total_item");
-        var total_tax_item = document.getElementById("total_tax_item");    
+        var total_tax_item = document.getElementById("total_tax_item");
 
         //buttons
         var btn_add = document.getElementById("btn_add");
@@ -152,13 +161,15 @@
             items_order = JSON.parse('{array_order_items}') || [];
         }
 
-        createTable(items_order);  
+        createTable(items_order);
 
         function removeRow(rowId, id) {
             rowId.remove();
+
             items_order = items_order.filter(function(obj) {
                 return obj.item_number !== id;
             });
+
             localStorage.setItem('items', JSON.stringify(items_order));
         }
 
@@ -187,19 +198,19 @@
                 let row = document.createElement('tr');
                 row.setAttribute("id", "trb"+item.item_number);
                 row.innerHTML = `
-                <td style="text-align:center">
-                    <a href='#div_order_items' onClick='removeRow(trb${item.item_number}, ${item.item_number})'>
-                        <img src='View/images/excluir.png' style='width:17px'>
-                    </a>                
-                </td>
-                <td style="text-align:right">${item.item_number}</td>
-                <td>${item.product_desc}</td>
-                <td style="text-align:right">${item.quantity}</td>
-                <td style="text-align:right">${item.price}</td>
-                <td style="text-align:right">${item.value_total}</td>
-                <td style="text-align:right">${item.value_total_tax}</td>
+                    <td style="text-align:center">
+                        <a href='#div_order_items' onClick='removeRow(trb${item.item_number}, ${item.item_number})'>
+                            <img src='View/images/excluir.png' style='width:17px'>
+                        </a>
+                    </td>
+                    <td style="text-align:right">${item.item_number}</td>
+                    <td>${item.product_desc}</td>
+                    <td style="text-align:right">${item.quantity}</td>
+                    <td style="text-align:right">${item.price}</td>
+                    <td style="text-align:right">${item.value_total}</td>
+                    <td style="text-align:right">${item.value_total_tax}</td>
                 `;
-                
+
                 total_order += parseFloat(item.value_total);
                 total_order_tax += parseFloat(item.value_total_tax);
 
@@ -226,11 +237,12 @@
 
         function addItem() {
             if(product_item.selectedIndex == "0" || quantity_item.value < 1 ) {
-                alert("É necessario selecionar o produto, e a quantidade precisa ser maior que zero! ");
+                alert("É necessario selecionar o produto, e a quantidade precisa ser maior que zero!");
                 return false;
             }
-            next_number = JSON.parse(localStorage.getItem("next_number")) || 1;        
-            
+
+            next_number = JSON.parse(localStorage.getItem("next_number")) || 1;
+
             items_order.push({
                 item_number: next_number,
                 product_desc: product_desc,
@@ -240,15 +252,16 @@
                 value_total: total_item.value,
                 value_total_tax: total_tax_item.value
             });
+
             localStorage.setItem('items', JSON.stringify(items_order));
-            next_number++;        
+            next_number++;
             localStorage.setItem('next_number', JSON.stringify(next_number));
-        
+
             label_alert.innerHTML = "Foram incluidos "+quantity_item.value+" "+product_desc+" no pedido com sucesso.";
             clearIncludeproduct();
-            createTable(items_order);            
+            createTable(items_order);
             showHideDiv(div_alert, show = 1) 
-            window.location.href = "#panel_include";        
+            window.location.href = "#panel_include";
         }
 
         function calcTotal() {
@@ -258,22 +271,24 @@
 
         function endOrderSale() {
             order_items.value = (localStorage.getItem("items"));
-            if(order_items.value.length == 0) {
+
+            if (order_items.value.length == 0) {
                 alert("erro ao finalizar pedido. É necessario inserir 1 produto no minimo. ");
-                return ;
+                return;
             }
+
             clearOrderSaleItems();
         }
 
         function clearOrderSaleItems() {
             tblOrderBody.remove();
             localStorage.clear();
-            items_order = [];   
+            items_order = [];
         }
 
         function clearOrderSaleTotalsItems() {
-            order_total.value = 0;     
-            order_total_tax.value = 0;  
+            order_total.value = 0;
+            order_total_tax.value = 0;
             clearOrderSaleItems()
         }
 
@@ -284,9 +299,8 @@
             quantity_item.value = 1;
             price_item.value = 0;
             total_item.value = 0;
-            total_tax_item.value = 0;   
+            total_tax_item.value = 0;
         }
-    
     </script>
 </body>
 </html>

@@ -8,9 +8,9 @@ class InitList
     {
         $this->html = file_get_contents('View/list_init.html');
     }
-   
+
     public function show()
-    {       
+    {
         echo $this->html;
     }
 }

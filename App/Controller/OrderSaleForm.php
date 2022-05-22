@@ -56,15 +56,17 @@ class OrderSaleForm
             Transaction::close();
 
             $select_products = "<option selected=1 value='0'> Selecione um Produto </option>";
+
             foreach ($products as $product) {
                 $values_product = $product['id'];
                 $description = $product['description']." - imp: (".(str_replace(".",",",$product['tax_percetage'])."%)");                
                 $select_products .= "<option value='{$values_product}' data-price='{$product['value']}' data-tax_percentage='{$product['tax_percetage']}'> {$description} </option>";
             }
+
             $this->data['combo_products'] = $select_products;
         } catch (Exception $e) {
             echo $e->getMessage();
-        }       
+        }
     }
 
     public function save($param)
@@ -78,7 +80,7 @@ class OrderSaleForm
                 'order_total' => $param['order_total'], 
                 'order_total_tax' => $param['order_total_tax']
             ];
-            
+
             Transaction::open(DATABASE);
             $order_sale_id = OrderSale::save($order_sale);
 
@@ -105,5 +107,5 @@ class OrderSaleForm
         $this->html = str_replace('{combo_products}', $this->data['combo_products'], $this->html);
         $this->html = str_replace('{array_order_items}', json_encode($this->data['order_items']), $this->html);
         echo $this->html;
-    }    
+    }
 }

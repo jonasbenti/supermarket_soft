@@ -6,10 +6,10 @@ class OrderSale
 {
     public static function find($id)
     {
-        if ($conn = Transaction::get()) {            
+        if ($conn = Transaction::get()) {
             $result = $conn->prepare("select * from supermarket_soft.order_sale WHERE id= :id");
             $result->execute([':id' => $id]);
-            
+
             return $result->fetch(PDO::FETCH_ASSOC);
         } else {
             throw new Exception('Não há transação ativa!!'.__FUNCTION__);
@@ -59,15 +59,17 @@ class OrderSale
                 }
                 $set_update = implode(", ", $set);
                 $sql = "UPDATE supermarket_soft.order_sale SET $set_update, updated_at = now() WHERE id = '$id'";
-            }            
+            }
+
             $result = $conn->query($sql);
-            
+
             if ($result) {
                 $result = $conn->lastInsertId();
             }
+
             return $result;
         } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);            
+            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
         }
-    }    
+    }
 }

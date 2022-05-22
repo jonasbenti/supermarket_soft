@@ -39,6 +39,7 @@ class TypeProductFormList
             Transaction::close();
 
             $items = '';
+
             foreach ($TypeProducts as $TypeProduct) {     
                 $item = file_get_contents('View/item_type_product.html');
                 $item = str_replace('{id}', $TypeProduct['id'], $item);
@@ -46,7 +47,8 @@ class TypeProductFormList
                 $item = str_replace('{tax_percentage}', $TypeProduct['tax_percentage'], $item); 
                 $items .= $item;
             }
-            $this->data['product_list'] = $items;            
+
+            $this->data['product_list'] = $items;
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -74,10 +76,9 @@ class TypeProductFormList
         $this->html = str_replace('{description}', $this->data['description'], $this->html);
         $this->html = str_replace('{tax_percentage}', $this->data['tax_percentage'], $this->html); 
         $this->html = str_replace('{items}', $this->data['product_list'], $this->html);
-           
+
         echo $this->html;
     }
-    
 }
 
 
