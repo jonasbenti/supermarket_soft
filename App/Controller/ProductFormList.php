@@ -64,7 +64,7 @@ class ProductFormList
             Transaction::open(DATABASE);
             $type_products = TypeProduct::all();
             Transaction::close();
-            $select_type_products = "<option value='0'> Selecione um Produto </option>";
+            $select_type_products = "<option value=''> Selecione um Produto </option>";
 
             foreach ($type_products as $type_product) {
                 $id = $type_product['id'];
@@ -84,19 +84,8 @@ class ProductFormList
         try {
             Transaction::open(DATABASE);
             Product::save($param);
-            $type_products = TypeProduct::all();
             Transaction::close();
 
-            $this->data = $param;
-            $select_type_products = "<option selected=1 value='0'> Selecione um Produto </option>";
-
-            foreach ($type_products as $type_product) {
-                $product_id   = $type_product['id'];
-                $description = $type_product['description'];
-                $select_type_products .= "<option value='{$product_id}'> {$description} </option>";
-            }
-
-            $this->data['combo_type_products'] = $select_type_products;
             header("Location: index.php?class=ProductFormList");
         } catch (Exception $e) {
             echo $e->getMessage();

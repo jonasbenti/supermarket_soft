@@ -13,12 +13,12 @@ class OrderSaleForm
     {
         $this->html = file_get_contents('View/form_order_sale.html');
         $this->data = [
-        'id' => '',
-        'order_date' => date('d/m/Y'),
-        'order_total' => '0',
-        'order_total_tax' => '0',
-        'combo_products' => '',
-        'order_items' => []
+            'id' => '',
+            'order_date' => date('d/m/Y'),
+            'order_total' => '0',
+            'order_total_tax' => '0',
+            'combo_products' => '',
+            'order_items' => []
         ];
     }
 
@@ -29,13 +29,13 @@ class OrderSaleForm
             Transaction::open(DATABASE);
             $products = Product::all();
             $this->data = OrderSale::find($order_id); 
-            $this->data['order_items'] = OrderSaleItem::findByOrderSale($order_id);                
+            $this->data['order_items'] = OrderSaleItem::findByOrderSale($order_id);
             Transaction::close();
 
             $select_products = "<option selected=1 value='0'> Selecione um Produto </option>";
             foreach ($products as $product) {
                 $values_product = $product['id']."_|_".$product['description']."_|_".$product['value']."_|_".$product['tax_percetage'];
-                $description = $product['description'];                
+                $description = $product['description'];
                 $select_products .= "<option value='{$values_product}'> {$description} </option>";
             }
 
@@ -55,11 +55,11 @@ class OrderSaleForm
             $products = Product::all();
             Transaction::close();
 
-            $select_products = "<option selected=1 value='0'> Selecione um Produto </option>";
+            $select_products = "<option selected=1 value=''> Selecione um Produto </option>";
 
             foreach ($products as $product) {
                 $values_product = $product['id'];
-                $description = $product['description']." - imp: (".(str_replace(".",",",$product['tax_percetage'])."%)");                
+                $description = $product['description']." - imp: (".(str_replace(".",",",$product['tax_percetage'])."%)");
                 $select_products .= "<option value='{$values_product}' data-price='{$product['value']}' data-tax_percentage='{$product['tax_percetage']}'> {$description} </option>";
             }
 

@@ -1,31 +1,25 @@
-<!DOCTYPE html>
-
-<head style="text-align:center">
-    <meta charset="UTF-8">
-    <title>Bem Vindo</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body style="text-align:center">
-    <div class="panel panel-primary">
-        <div class="panel-heading" style="text-align: center">Bem Vindo ao SupermarketSoft</div>
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>SupermarketSoft 2.0</title>
+  </head>
+  <body>
+    <div>
+        <span class="d-block p-2 bg-primary text-white "><h3 class="d-flex justify-content-center">SupermarketSoft 2.0</h3></span>
     </div>
-    <br>
-    <button type="button" onclick="window.location='./index.php?class=ProductFormList'" class="btn btn-primary btn-lg btn-block">
-        <H4>Lista de Produtos</H4>
-    </button>
-    <br>
-    <button type="button" onclick="window.location='./index.php?class=TypeProductFormList'" class="btn btn-primary btn-lg btn-block">
-        <H4>Lista de Tipos de produto</H4>
-    </button>
-    <br>
-    <button type="button" onclick="window.location='./index.php?class=OrderSaleForm'" class="btn btn-success btn-lg btn-block">
-        <H4>Criar Pedido</H4>
-    </button>
-    <br>
-    <button type="button" onclick="window.location='./index.php?class=OrderSaleList'" class="btn btn-primary btn-lg btn-block">
-        <H4>Lista de Pedido</H4>
-    </button>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <b>
+    <section>
+        <div class="list-group">
+            <a href="./index.php?class=TypeProductFormList" class="list-group-item list-group-item-action"><p class="text-primary">Lista de Tipos de produto</p></a>
+            <a href="./index.php?class=ProductFormList" class="list-group-item list-group-item-action"><p class="text-primary">Lista de produtos</p></a>
+            <a href="./index.php?class=OrderSaleForm" class="list-group-item list-group-item-action"><p class="text-primary">Criar pedido</p></a>
+            <a href="./index.php?class=OrderSaleList" class="list-group-item list-group-item-action"><p class="text-primary">Lista de pedidos</p></a>
+        </div>
+    </section>
+    </b>
+  </body>
 </html>

@@ -28,6 +28,7 @@ class OrderSaleList
                 $item = str_replace('{order_total_tax}', $order_sale['order_total_tax'], $item);
                 $items .= $item;
             }
+
             $this->html = str_replace('{items}', $items, $this->html);
         } catch (Exception $e) {
             echo $e->getMessage();

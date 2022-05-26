@@ -1,60 +1,58 @@
-<!DOCTYPE html>
-
-<head>
-    <meta charset="UTF-8">
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Formulário de tipo de produto {id}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-    <div class="panel panel-primary">
-        <div class="panel-heading" style="text-align: center">Formulário de tipo de produto <b>{id}</b></div>
-    </div>    
-    <form enctype="multipart/form-data"  method="post" action="index.php?class=TypeProductFormList&method=save">
+  </head>
+  <body>
+    <div>
+        <span class="d-block p-2 bg-primary text-white ">
+            <h3 class="d-flex justify-content-center">Formulário de tipo de produto <b>{id}</b></h3>
+        </span>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <form method="post" action="index.php?class=TypeProductFormList&method=save">
+        <input id="id" name="id" type="hidden" value="{id}">
         <div class="container">
-            <input id="id" name="id" type="hidden" value="{id}">
-            <div class="form-group col-md-6">
-                <label>Descrição</label>
-                <input name="description" class="form-control" type="text" style="width: 50%"
-                value="{description}" required>
-                <br>
-            </div>
-
-            <div class="form-group col-md-3">
-                <label>Imposto(%)</label>
-                <input name="tax_percentage" class="form-control" type="text" style="width: 50%"
-                value="{tax_percentage}" required>
-                <br>
+            <div class="row">
+                <div class="col-md-4 position-relative">
+                    <label for="description" class="form-label"><b>Descrição</b></label>
+                    <input name="description" type="text" class="form-control" id="description" value="{description}"
+                    required oninvalid="this.setCustomValidity('Campo Descrição requerido')" onchange="try{setCustomValidity('')}catch(e){}">
+                </div>
+                <div class="col-md-4 position-relative">
+                    <label for="tax_percentage" class="form-label"><b>Imposto(%)</b></label>
+                    <input name="tax_percentage" type="text" class="form-control" id="tax_percentage" value="{tax_percentage}" 
+                    required oninvalid="this.setCustomValidity('Campo Imposto(%) requerido')" onchange="try{setCustomValidity('')}catch(e){}">
+                </div>
             </div>
         </div>
-
-        <div id="panel_include" class="panel panel-primary">
-            <div class="panel-heading" style="text-align: center">Ações</div>
-        </div>
-
-        <div class="container" style="text-align: center">
-            <a href="index.php?class=TypeProductFormList" class="btn btn-primary"> Novo Tipo de produto</a>
-            <input type="submit" class="btn btn-success" value="Incluir/Editar">
-            <a href="index.php" class="btn btn-info"> Voltar ao início</a>
-        </div>
-        <br>
-        <div id="panel_include" class="panel panel-primary">
-            <div class="panel-heading" style="text-align: center">Listagem de Produtos</div>
+        <div class="text-center">
+            <div class="m-3 btn-group" role="group" aria-label="Basic mixed styles example">
+                <input class="btn btn-success" type="submit" value="Incluir/Editar">
+                <a class="btn btn-danger" href="index.php?class=TypeProductFormList" role="button">Reset</a>
+                <a class="btn btn-primary" href="index.php" role="button">Voltar ao início</a>
+            </div>
         </div>
     </form>
-    <table class="table table-striped table-bordered table-hover">
-        <thead class="thead-dark">
-            <tr>
-            <td></td>
-            <td><b>Id</b></td>
-            <td><b>Descrição</b></td>
-            <td><b>Imposto(%)</b></td>
-            </tr>
-        </thead>
-        <tbody class="Table table-striped table-bordered table-hover">
-            {items}
-        </tbody>
-    </table>
-</body>
+
+    <div class="container">
+        <table class="table table-striped table-hover caption-top">
+            <caption class="text-center"><h3>Lista de tipos de produto</h3></caption>
+            <thead class="table-primary">
+                <tr>
+                    <td></td>
+                    <td><b>Id</b></td>
+                    <td><b>Descrição</b></td>
+                    <td><b>Imposto(%)</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                {items}
+            </tbody>
+        </table>
+    </div>
+  </body>
 </html>
