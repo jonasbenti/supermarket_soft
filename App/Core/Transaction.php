@@ -8,9 +8,9 @@ class Transaction
 
     private function __construct() {}
 
-    public static function open($database)
+    public static function open()
     {
-        self::$conn = Connection::open($database);
+        self::$conn = Connection::open();
         self::$conn->beginTransaction();
     }
 

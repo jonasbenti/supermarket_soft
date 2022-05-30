@@ -26,7 +26,7 @@ class OrderSaleForm
     {
         try {
             $order_id = (int) $param['id'];
-            Transaction::open(DATABASE);
+            Transaction::open();
             $products = Product::all();
             $this->data = OrderSale::find($order_id); 
             $this->data['order_items'] = OrderSaleItem::findByOrderSale($order_id);
@@ -51,7 +51,7 @@ class OrderSaleForm
     public function load()
     {
         try {
-            Transaction::open(DATABASE);
+            Transaction::open();
             $products = Product::all();
             Transaction::close();
 
@@ -79,7 +79,7 @@ class OrderSaleForm
                 'order_total_tax' => $param['order_total_tax']
             ];
 
-            Transaction::open(DATABASE);
+            Transaction::open();
             $order_sale_id = OrderSale::save($order_sale);
 
             foreach ($order_sale_items as $order_sale_item) {

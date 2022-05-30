@@ -23,7 +23,7 @@ class TypeProductFormList
     {
         try {
             $id = (int) $param['id'];
-            Transaction::open(DATABASE);
+            Transaction::open();
             $this->data = TypeProduct::find($id);
             Transaction::close();
         } catch (Exception $e) {
@@ -34,7 +34,7 @@ class TypeProductFormList
     public function load()
     {
         try {
-            Transaction::open(DATABASE);
+            Transaction::open();
             $typeProducts = TypeProduct::all();
             Transaction::close();
 
@@ -57,7 +57,7 @@ class TypeProductFormList
     public function save($param)
     {
         try {
-            Transaction::open(DATABASE);
+            Transaction::open();
             TypeProduct::save($param);
             Transaction::close();
 

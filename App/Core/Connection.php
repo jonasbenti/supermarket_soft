@@ -4,20 +4,20 @@ class Connection
 {
     private function __construct() {}
 
-    public static function open($name)
+    public static function open()
     {
-        if (file_exists("App/Config/{$name}.ini")) {
-            $db = parse_ini_file("App/Config/{$name}.ini");
+        if (file_exists(".env")) {
+            $db = parse_ini_file(".env");
         } else {
-            throw new Exception("Arquivo {$name} não encontrado");
+            throw new Exception("Arquivo .env não encontrado");
         }
-        $user = isset($db['user']) ? $db['user'] : null;
-        $pass = isset($db['pass']) ? $db['pass'] : null;
-        $name = isset($db['name']) ? $db['name'] : null;
-        $host = isset($db['host']) ? $db['host'] : null;
-        $type = isset($db['type']) ? $db['type'] : null;
-        $port = isset($db['port']) ? $db['port'] : 5432;
-        $conn = new PDO("{$type}:dbname={$name} host={$host}", $user, $pass);
+        $dbuser = isset($db['dbuser']) ? $db['dbuser'] : null;
+        $dbpass = isset($db['dbpass']) ? $db['dbpass'] : null;
+        $dbname = isset($db['dbname']) ? $db['dbname'] : null;
+        $dbhost = isset($db['dbhost']) ? $db['dbhost'] : null;
+        $dbtype = isset($db['dbtype']) ? $db['dbtype'] : null;
+        $dbport = isset($db['dbport']) ? $db['dbport'] : 5432;
+        $conn = new PDO("{$dbtype}:dbname={$dbname} host={$dbhost}", $dbuser, $dbpass);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         return $conn;
