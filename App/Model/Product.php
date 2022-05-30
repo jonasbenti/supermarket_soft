@@ -7,11 +7,11 @@ class Product
     public static function find($id)
     {
         if ($conn = Transaction::get()) {
-            $result = $conn->prepare("select p.*, tp.tax_percentage as tax_percetage from supermarket_soft.product p 
-            inner join supermarket_soft.type_product tp ON tp.id = p.type_product_id
+            $result = $conn->prepare("select p.*, tp.tax_percentage as tax_percetage from product p 
+            inner join type_product tp ON tp.id = p.type_product_id
             WHERE p.id= :id");
             $result->execute([':id' => $id]);
-            
+
             return $result->fetch(PDO::FETCH_ASSOC);
         } else {
             throw new Exception('Não há transação ativa!!'.__FUNCTION__);
@@ -21,7 +21,7 @@ class Product
     public static function delete($id)
     {
         if ($conn = Transaction::get()) {
-            $result = $conn->prepare("DELETE from supermarket_soft.product WHERE id= :id");
+            $result = $conn->prepare("DELETE from product WHERE id= :id");
             $result->execute([':id' => $id]);
 
             return $result;
@@ -33,8 +33,8 @@ class Product
     public static function all()
     {
         if ($conn = Transaction::get()) { 
-            $result = $conn->query("select p.*, tp.tax_percentage as tax_percetage, tp.description as type_product from supermarket_soft.product p 
-            inner join supermarket_soft.type_product tp ON tp.id = p.type_product_id
+            $result = $conn->query("select p.*, tp.tax_percentage as tax_percetage, tp.description as type_product from product p 
+            inner join type_product tp ON tp.id = p.type_product_id
             order by id desc");
 
             return $result->fetchAll(PDO::FETCH_ASSOC);
@@ -58,7 +58,7 @@ class Product
             if (empty($id)) {
                 $keys_insert = implode(", ",array_keys($product));
                 $values_insert = "'".implode("', '",array_values($product))."'";
-                $sql = "INSERT INTO supermarket_soft.product ($keys_insert) VALUES ($values_insert)";
+                $sql = "INSERT INTO product ($keys_insert) VALUES ($values_insert)";
             } else {
                 $set = [];
 
@@ -67,7 +67,7 @@ class Product
                 }
 
                 $set_update = implode(", ", $set);
-                $sql = "UPDATE supermarket_soft.product SET $set_update, updated_at = now() WHERE id = '$id'";
+                $sql = "UPDATE product SET $set_update, updated_at = now() WHERE id = '$id'";
             }
             $result = $conn->query($sql);
 
@@ -75,5 +75,5 @@ class Product
         } else {
             throw new Exception('Não há transação ativa!!'.__FUNCTION__);
         }
-    }    
+    }
 }

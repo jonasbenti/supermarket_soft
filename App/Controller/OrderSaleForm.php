@@ -72,8 +72,6 @@ class OrderSaleForm
     public function save($param)
     {
         try {
-            if ($param['error'] == 1) throw new Exception("É necessario inserir no minimo 1 produto no pedido");
-           
             $order_sale_items = json_decode($param['order_items'], true);
             $order_sale = [
                 'order_date' => $param['order_date'], 
@@ -100,7 +98,7 @@ class OrderSaleForm
     {
         $this->load();
         $this->html = file_get_contents('View/form_order_sale.html');
-        $this->html = str_replace('{order_id}', $this->data['id'], $this->html);
+        $this->html = str_replace('{order_id}', isset($this->data['id']) ? $this->data['id'] : '', $this->html);
         $this->html = str_replace('{order_date}', $this->data['order_date'], $this->html);
         $this->html = str_replace('{order_total}', $this->data['order_total'], $this->html);
         $this->html = str_replace('{order_total_tax}', $this->data['order_total_tax'], $this->html);

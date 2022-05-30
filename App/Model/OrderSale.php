@@ -7,7 +7,7 @@ class OrderSale
     public static function find($id)
     {
         if ($conn = Transaction::get()) {
-            $result = $conn->prepare("select * from supermarket_soft.order_sale WHERE id= :id");
+            $result = $conn->prepare("select * from order_sale WHERE id= :id");
             $result->execute([':id' => $id]);
 
             return $result->fetch(PDO::FETCH_ASSOC);
@@ -19,7 +19,7 @@ class OrderSale
     public static function delete($id)
     {
         if ($conn = Transaction::get()) {
-            $result = $conn->prepare("DELETE from supermarket_soft.order_sale WHERE id= :id");
+            $result = $conn->prepare("DELETE from order_sale WHERE id= :id");
             $result->execute([':id' => $id]);
 
             return $result;
@@ -31,7 +31,7 @@ class OrderSale
     public static function all()
     {
         if ($conn = Transaction::get()) { 
-            $result = $conn->query("select * from supermarket_soft.order_sale ORDER BY id desc");
+            $result = $conn->query("select * from order_sale ORDER BY id desc");
 
             return $result->fetchAll(PDO::FETCH_ASSOC);
         } else {
@@ -45,20 +45,23 @@ class OrderSale
             foreach ($order_sale as $key => $value) {
                 $order_sale[$key] = strip_tags(addslashes($value));
             }
+
             $id = isset($order_sale['id']) ? $order_sale['id'] : 0;
             unset($order_sale['id']);
-           
+            $date = explode("/", $order_sale['order_date']);
+            $order_sale['order_date'] = "{$date[2]}-{$date[1]}-{$date[0]}";
+
             if (empty($id)) {
                 $keys_insert = implode(", ",array_keys($order_sale));
                 $values_insert = "'".implode("', '",array_values($order_sale))."'";
-                $sql = "INSERT INTO supermarket_soft.order_sale ($keys_insert) VALUES ($values_insert)";
+                $sql = "INSERT INTO order_sale ($keys_insert) VALUES ($values_insert)";
             } else {
                 $set = [];
                 foreach ($order_sale as $column => $value) {
                     $set[] = "$column = '$value'";
                 }
                 $set_update = implode(", ", $set);
-                $sql = "UPDATE supermarket_soft.order_sale SET $set_update, updated_at = now() WHERE id = '$id'";
+                $sql = "UPDATE order_sale SET $set_update, updated_at = now() WHERE id = '$id'";
             }
 
             $result = $conn->query($sql);
