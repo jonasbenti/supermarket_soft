@@ -14,7 +14,7 @@ class OrderSaleList
     public function load()
     {
         try {
-            Transaction::open(DATABASE);
+            Transaction::open();
             $order_sales = OrderSale::all();
             Transaction::close();
             $items = '';

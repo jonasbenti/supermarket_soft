@@ -26,7 +26,7 @@ class ProductFormList
     {
         try {
             $id = (int) $param['id'];
-            Transaction::open(DATABASE);
+            Transaction::open();
             $this->data = Product::find($id);
             Transaction::close();
         } catch (Exception $e) {
@@ -37,7 +37,7 @@ class ProductFormList
     public function load()
     {
         try {
-            Transaction::open(DATABASE);
+            Transaction::open();
             $products = Product::all();
             Transaction::close();
 
@@ -61,7 +61,7 @@ class ProductFormList
     public function loadTypeProduct($type_product_id = 0)
     {
         try {
-            Transaction::open(DATABASE);
+            Transaction::open();
             $type_products = TypeProduct::all();
             Transaction::close();
             $select_type_products = "<option value=''> Selecione um Produto </option>";
@@ -82,7 +82,7 @@ class ProductFormList
     public function save($param)
     {
         try {
-            Transaction::open(DATABASE);
+            Transaction::open();
             Product::save($param);
             Transaction::close();
 
