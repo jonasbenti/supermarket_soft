@@ -1,4 +1,4 @@
-# Supermarket_soft
+# Supermarket_soft 2.0
 
 ## Projeto Realizado para simular um PDV de supermercado;
 
@@ -12,6 +12,15 @@
 - Importar o dump que está na raiz do projeto;
 - Renomear o arquivo supermarket_soft_conf.ini para supermarket_soft.ini com as configrações da sua base de dados;
 
+# Melhorias realizadas 2.0
+- Atualizar a bootstrap para versão 5.
+- Novo visual;
+- Corregir bugs e melhorar validações dos formularios;
+- Melhorias de layout;
+- Editar itens do pedido;
+- Melhorias no codigo JS e Html;
+
 # Melhorias futuras
 - Validar melhor as informações inseridas nos Forms;
 - Criar testes automatizados;
+- Criar API;

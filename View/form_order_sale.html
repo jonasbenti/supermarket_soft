@@ -1,107 +1,117 @@
 <!DOCTYPE html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Pedido {order_id}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <!-- <script type="text/javascript" src="./View/js/process_order_sale.js"></script>
-    <script src="process_order_sale1.js"></script> -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Formulário de criação de pedido</title>
 </head>
-<body>  
-    <div class="panel panel-primary">
-        <div class="panel-heading" style="text-align: center">Pedido <b>{order_id}</b></div>
-    </div>  
+<body>
+    <div>
+        <span class="d-block p-2 bg-primary text-white ">
+            <h4 class="d-flex justify-content-center">Formulário de criação de pedido <b>{order_id}</b></h4>
+        </span>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <form enctype="multipart/form-data" method="post" action="index.php?class=OrderSaleForm&method=save">
         <input id="order_id" name="order_id" type="hidden" value="{order_id}">
+        <input id="order_items" name="order_items" type="hidden" value="">
         <div class="container">
-            <div class="form-group col-md-4">
-                <label>Data</label>
-                <input name="order_date" id="order_date" class="form-control" type="text" 
-                    value="{order_date}" style="width: 30%" required>
-            </div>    
-            <div class="form-group col-md-3">
-                <label>Valor Total</label>
-                <input name="order_total" id="order_total" class="form-control" type="text" 
-                style="width: 30%" value="0" readonly="1">
-            </div>
-            <div class="form-group col-md-3">
-                <label>Valor Total de imposto</label>
-                <input name="order_total_tax" id="order_total_tax" class="form-control" type="text" 
-                style="width: 30%" value="0" readonly="1">
-            </div>
-        </div>        
-        <div id="panel_include" class="panel panel-primary">
-            <div class="panel-heading" style="text-align: center">Incluir produto</div>
-        </div>
-        <div id="div_alert" class="container">
-            <div class="alert alert-success alert-dismissible">
-                <label id="label_alert"></label>
-                <button type="button" class="close" onclick="showHideDiv(div_alert)">&times;</button>
+            <div class="row">
+                <div class="col-md-2 position-relative">
+                    <label for="order_date" class="form-label"><b>Data</b></label>
+                    <input name="order_date" type="text" class="form-control" id="order_date" value="{order_date}"
+                    required oninvalid="this.setCustomValidity('Campo Data requerido')" onchange="try{setCustomValidity('')}catch(e){}">
+                </div>
+                <div class="col-md-2 position-relative">
+                    <label for="order_total" class="form-label"><b>Valor Total</b></label>
+                    <input name="order_total" type="text" class="form-control" id="order_total" readonly="1"
+                    required oninvalid="this.setCustomValidity('Campo Valor Total requerido')" onchange="try{setCustomValidity('')}catch(e){}">
+                </div>
+                <div class="col-md-2 position-relative">
+                    <label for="order_total_tax" class="form-label"><b>VT. imposto</b></label>
+                    <input name="order_total_tax" type="text" class="form-control" id="order_total_tax" readonly="1"
+                    required oninvalid="this.setCustomValidity('Campo Valor Total de imposto requerido')" onchange="try{setCustomValidity('')}catch(e){}">
+                </div>
             </div>
         </div>
-        <div id="div_include" class="container">
-            <div class="container">
-                <div class="form-group col-md-3">
-                    <label>Produto</label>
-                    <select class="form-control" size="1" id="product_item" 
-                    name="product_item" onchange="findProduct()">
-                        {combo_products}             
+        <div id="div_panel_include_item">
+            <span class="d-block p-2 bg-primary text-white ">
+                <h6 class="d-flex justify-content-center">Inclusão de produtos</h6>
+            </span>
+        </div>
+        <div id="div_include_item" class="container">
+            <div class="row">
+                <input id="item_number" name="item_number" type="hidden" value="">
+                <div class="col-md-3 position-relative">
+                    <label for="product_item" class="form-label"><b>Produto</b></label>
+                    <select class="form-select" id="product_item" name="product_item" onchange="findProduct()">
+                        {combo_products}
                     </select>
                 </div>
-                <div class="form-group col-md-4">
-                    <label>Qtd</label>
-                    <input id="quantity_item" name="quantity_item" class="form-control"
-                    type="number" style="width: 30%" value="1" onblur="calcTotal()" min="1">                    
+                <div class="col-md-1 position-relative">
+                    <label for="quantity_item" class="form-label"><b>Qtd</b></label>
+                    <input name="quantity_item" type="number" class="form-control" id="quantity_item" value="1"
+                     onclick="updateTotalItem()" onkeyup="updateTotalItem()" min="1"
+                    required oninvalid="this.setCustomValidity('Campo Qtd requerido')" onchange="try{setCustomValidity('')}catch(e){}">
+                </div>
+                <div class="col-md-2 position-relative">
+                    <label for="price_item" class="form-label"><b>Preço</b></label>
+                    <input name="price_item" type="number" class="form-control" id="price_item" value="0" readonly="1">
+                </div>
+                <div class="col-md-2 position-relative">
+                    <label for="total_item" class="form-label"><b>Total</b></label>
+                    <input name="total_item" type="number" class="form-control" id="total_item" value="0" readonly="1">
+                </div>
+                <div class="col-md-2 position-relative">
+                    <label for="total_tax_item" class="form-label"><b>Total Imp</b></label>
+                    <input name="total_tax_item" type="number" class="form-control" id="total_tax_item" value="0" readonly="1">
                 </div>
             </div>
-            <div class="container">
-                <div class="form-group col-md-4">
-                    <label>Preço</label>
-                    <input id="price_item" name="price_item" class="form-control"
-                    type="number" style="width: 30%" value="0" readonly="1">                    
-                </div>
-                <div class="form-group col-md-4">
-                    <label>Total</label>
-                    <input id="total_item" name="total_item" class="form-control"
-                    type="number" style="width: 30%" value="0" readonly="1">                    
-                </div> 
-                <div class="form-group col-md-4">
-                    <label>Total Imp.</label>
-                    <input id="total_tax_item" name="total_tax_item" class="form-control"
-                    type="number" style="width: 30%" value="0" readonly="1">                    
-                </div>
+        </div>
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header text-white bg-primary border-0">
+                <strong class="me-auto text-white bg-primary border-0">SupermarketSoft 2.0</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                <p id="toast_res">Produto Adicionado ao pedido.</p>
+              </div>
             </div>
-            <input id="order_items" name="order_items" type="hidden" value="">            
         </div>
-        <div class="panel panel-primary">
-                <div class="panel-heading" style="text-align: center">Opções</div>              
+        <div class="text-center">
+            <div class="m-3 btn-group" role="group" aria-label="Basic mixed styles example">
+                <a class="btn btn-primary" id="btn_add" onclick="addItem()" role="button">Add Item</a>
+                <a class="btn btn-danger" id="btn_clear_item" onclick="clearIncludeproduct()" role="button" type="button" >Limpar Item</a>
+                <input class="btn btn-success" id="btn_submit" type="submit" onclick="return endOrderSale()" value="Finalizar Pedido">
+            </div>
         </div>
-        <div style="text-align: center">
-            <button type="button" id="btn_add" onclick="addItem()" class="btn btn-primary" href="#panel_include">Add produto</button>
-            <a href="index.php?class=OrderSaleList" class="btn btn-info"> Voltar a Lista de pedidos </a>
-            <input type="submit" id="btn_submit" class="btn btn-success" onclick="endOrderSale()" value="Finalizar Pedido">
-            <button type="button" id="btn_clear" onclick="clearOrderSaleTotalsItems()" class="btn btn-danger">Limpar itens</button>
-        </div>
-    </form>    
-    <br>
-    <div id="div_order_items" class="panel panel-primary">
-        <div class="panel-heading" style="text-align: center">Itens do pedido</div>
+    </form>
+
+    <div class="container">
+        <table id="tbl_order" class="table table-bordered table-striped table-hover caption-top">
+            <caption class="text-center">
+                <h3>Itens do pedido</h3>
+                <a class="btn btn-danger" id="btn_clear_order" onclick="return clearOrderSaleTotalsItems()" role="button" type="button" >Limpar itens</a>
+                <a class="btn btn-primary" href="index.php" role="button">Voltar ao início</a>
+                <a class="btn btn-secondary" href="index.php?class=OrderSaleList" role="button">Ir para Lista de pedidos</a>
+            </caption>
+            <thead class="table-primary">
+                <tr>
+                    <th style="text-align:center" id="thead_delete">Excluir</th>
+                    <th style="text-align:center" id="thead_edit">Editar</th>
+                    <th style="text-align:right">Nº</th>
+                    <th>Produto</th>
+                    <th style="text-align:right">Qtd</th>
+                    <th style="text-align:right">Preço</th>
+                    <th style="text-align:right">Total</th>
+                    <th style="text-align:right">Total Imp.</th>
+                </tr>
+            </thead>
+        </table>
     </div>
-    <table id="tbl_order" class="table table-striped table-bordered table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th style="text-align:center">Excluir</th>
-                <th style="text-align:right">Nº</th>
-                <th>Produto</th>
-                <th style="text-align:right">Qtd</th>
-                <th style="text-align:right">Preço</th>
-                <th style="text-align:right">Total</th>
-                <th style="text-align:right">Total Imp.</th>
-            </tr>
-        </thead>
-    </table>
 
     <script type="text/javascript">
         //elements
@@ -119,64 +129,84 @@
         var order_total = document.getElementById("order_total");
         var order_total_tax = document.getElementById("order_total_tax");
         var product_item = document.getElementById("product_item");
-        var quantity_item = document.getElementById("quantity_item");  
+        var quantity_item = document.getElementById("quantity_item");
         var price_item = document.getElementById("price_item");
         var total_item = document.getElementById("total_item");
-        var total_tax_item = document.getElementById("total_tax_item");    
+        var total_tax_item = document.getElementById("total_tax_item");
+        var item_number = document.getElementById("item_number");
 
         //buttons
         var btn_add = document.getElementById("btn_add");
         var btn_submit = document.getElementById("btn_submit");
-        var btn_clear = document.getElementById("btn_clear");
+        var btn_clear_order = document.getElementById("btn_clear_order");
+        var btn_clear_item = document.getElementById("btn_clear_item");
+
+        //thead
+        var thead_delete = document.getElementById("thead_delete");
+        var thead_edit = document.getElementById("thead_edit");
 
         //divs
-        var panel_include = document.getElementById("panel_include");
-        var div_include = document.getElementById("div_include");
-        var div_alert = document.getElementById("div_alert");
+        var div_panel_include_item = document.getElementById("div_panel_include_item");
+        var div_include_item = document.getElementById("div_include_item");
 
         //label
         var label_alert = document.getElementById("label_alert");
 
         //variables
+        var product_selected;
         var product_id ;
         var product_desc;
-        var pruduct_perc_tax;
-        div_alert.style.display = 'none';
+        var product_perc_tax;
+        var msg_toast;
 
         if (order_id.value != "") {
+            order_date.readOnly = true;
+            thead_delete.style.display = 'none';
+            thead_edit.style.display = 'none';
             btn_add.style.display = 'none';
             btn_submit.style.display = 'none';
-            btn_clear.style.display = 'none';
-            panel_include.style.display = 'none';
-            div_include.style.display = 'none';
+            btn_clear_order.style.display = 'none';
+            btn_clear_item.style.display = 'none';
+            div_panel_include_item.style.display = 'none';
+            div_include_item.style.display = 'none';
             items_order = JSON.parse('{array_order_items}') || [];
         }
 
-        createTable(items_order);  
+        //initial values
+        updateTotalOrder(0, 0);
+        createTable(items_order);
 
         function removeRow(rowId, id) {
             rowId.remove();
-            items_order = items_order.filter(function(obj) {
-                return obj.item_number !== id;
-            });
+            items_order = items_order.filter(item => obj.item_number !== id);
+
             localStorage.setItem('items', JSON.stringify(items_order));
         }
 
-        function showHideDiv(div_show, show = 0) {
-            if(div_show.style.display == "none" || show == 1) {
-                div_show.style.display = 'block';
-                setTimeout(function() {
-                    div_show.style.display = 'none';
-                }, 4000);
-            } else {
-                div_show.style.display = 'none';
-            }
+        function editRow(rowId, id) {
+            item_order = items_order.find(item => item.item_number === id);
+
+            product_item.value = item_order.product_id;
+            product_selected = product_item.options[product_item.selectedIndex];
+            price_item.value = item_order.price;
+            quantity_item.value = item_order.quantity;
+            item_number.value = item_order.item_number;
+            product_perc_tax = product_selected.dataset.tax_percentage;
+            total_item.value = parseFloat((quantity_item.value * price_item.value)).toFixed(2);
+            total_tax_item.value = parseFloat((total_item.value * (product_perc_tax/100))).toFixed(2);
+        }
+
+        function findProduct() {
+            product_selected = product_item.options[product_item.selectedIndex];
+            product_id = product_selected.value;
+            product_desc = product_selected.text;
+            product_perc_tax = product_selected.dataset.tax_percentage;
+            price_item.value = product_selected.dataset.price;
+            updateTotalItem();
         }
 
         function createTable(items) {
-            items.sort(function(a, b) {
-                    return b.item_number - a.item_number
-            });
+            items.sort((a, b) => b.item_number - a.item_number);
 
             tblOrderBody.remove();
             tblOrderBody = document.createElement("tbody");
@@ -185,108 +215,145 @@
 
             for (item of items) {
                 let row = document.createElement('tr');
-                row.setAttribute("id", "trb"+item.item_number);
-                row.innerHTML = `
-                <td style="text-align:center">
-                    <a href='#div_order_items' onClick='removeRow(trb${item.item_number}, ${item.item_number})'>
-                        <img src='View/images/excluir.png' style='width:17px'>
-                    </a>                
+                let btnActions = order_id.value != "" ? "" :
+                `<td style="text-align:center">
+                    <a href='#' onClick='removeRow(trb${item.item_number}, ${item.item_number})'>
+                        <img src='View/images/excluir.png' style='width:15px'>
+                    </a>
                 </td>
-                <td style="text-align:right">${item.item_number}</td>
-                <td>${item.product_desc}</td>
-                <td style="text-align:right">${item.quantity}</td>
-                <td style="text-align:right">${item.price}</td>
-                <td style="text-align:right">${item.value_total}</td>
-                <td style="text-align:right">${item.value_total_tax}</td>
+                <td style="text-align:center">
+                    <a href='#' onClick='editRow(trb${item.item_number}, ${item.item_number})'>
+                        <img src='View/images/editar.png' style='width:15px'>
+                    </a>
+                </td>`;
+                row.setAttribute("id", "trb" + item.item_number);
+                row.innerHTML = `
+                    ${btnActions}
+                    <td style="text-align:right">${item.item_number}</td>
+                    <td>${item.product_desc}</td>
+                    <td style="text-align:right">${item.quantity}</td>
+                    <td style="text-align:right">${item.price}</td>
+                    <td style="text-align:right">${item.value_total}</td>
+                    <td style="text-align:right">${item.value_total_tax}</td>
                 `;
-                
+
                 total_order += parseFloat(item.value_total);
                 total_order_tax += parseFloat(item.value_total_tax);
 
-                update_total_order(total_order, total_order_tax);
+                updateTotalOrder(total_order, total_order_tax);
 
                 tblOrderBody.appendChild(row);
                 elAppTable.appendChild(tblOrderBody);
             }
         }
 
-        function update_total_order(value_total_order, value_total_order_tax) {
-            order_total.value = value_total_order;
-            order_total_tax.value = value_total_order_tax;
+        function updateTotalItem() {
+            total_item.value = parseFloat((quantity_item.value * price_item.value)).toFixed(2);
+            total_tax_item.value = parseFloat((total_item.value * (product_perc_tax/100))).toFixed(2);
         }
 
-        function findProduct() {
-            let produto_selected = product_item.options[product_item.selectedIndex];
-            product_id = produto_selected.value;
-            product_desc = produto_selected.text;
-            pruduct_perc_tax = produto_selected.dataset.tax_percentage;
-            price_item.value = produto_selected.dataset.price;
-            calcTotal();
+        function updateTotalOrder(value_total_order = 0, value_total_order_tax = 0) {
+            order_total.value = value_total_order.toFixed(2);
+            order_total_tax.value = value_total_order_tax.toFixed(2);
         }
 
         function addItem() {
-            if(product_item.selectedIndex == "0" || quantity_item.value < 1 ) {
-                alert("É necessario selecionar o produto, e a quantidade precisa ser maior que zero! ");
+            if (product_item.selectedIndex == "0" || quantity_item.value < 1) {
+                alert("É necessario selecionar o produto, e a quantidade precisa ser maior que zero!");
                 return false;
             }
-            next_number = JSON.parse(localStorage.getItem("next_number")) || 1;        
-            
-            items_order.push({
-                item_number: next_number,
-                product_desc: product_desc,
-                product_id: product_id,
-                quantity: quantity_item.value,
-                price: price_item.value,
-                value_total: total_item.value,
-                value_total_tax: total_tax_item.value
-            });
+
+            if (item_number.value != "") {
+                next_number = item_number.value;
+                msg_toast = `Item numero <b>${next_number}</b> Alterado!`;
+                items_order = items_order.map(item => {
+                    if (item.item_number == next_number) {
+                        product_selected = product_item.options[product_item.selectedIndex];
+                        item.product_desc = product_selected.text;
+                        item.product_id = product_selected.value;
+                        item.quantity = quantity_item.value;
+                        item.price = price_item.value;
+                        item.value_total = total_item.value;
+                        item.value_total_tax = total_tax_item.value;
+                    }
+
+                    return item;
+                });
+            } else {
+                next_number = JSON.parse(localStorage.getItem("next_number")) || 1;
+                items_order.push({
+                    item_number: next_number,
+                    product_desc: product_desc,
+                    product_id: product_id,
+                    quantity: quantity_item.value,
+                    price: price_item.value,
+                    value_total: total_item.value,
+                    value_total_tax: total_tax_item.value
+                });
+
+                next_number++;
+                localStorage.setItem('next_number', JSON.stringify(next_number));
+                msg_toast = `Produto <b>${product_desc}</b> adicionado ao pedido!`;
+            }
+
             localStorage.setItem('items', JSON.stringify(items_order));
-            next_number++;        
-            localStorage.setItem('next_number', JSON.stringify(next_number));
-        
-            label_alert.innerHTML = "Foram incluidos "+quantity_item.value+" "+product_desc+" no pedido com sucesso.";
+
             clearIncludeproduct();
-            createTable(items_order);            
-            showHideDiv(div_alert, show = 1) 
-            window.location.href = "#panel_include";        
+            createTable(items_order);
+            callToast(msg_toast);
         }
 
-        function calcTotal() {
-            total_item.value = (quantity_item.value * price_item.value).toFixed(2);
-            total_tax_item.value = (total_item.value * (pruduct_perc_tax/100)).toFixed(2);
+        function callToast(msg_toast) {
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            toast_res.innerHTML = msg_toast;
+            var toastList = toastElList.map(function(toastEl) {
+                return new bootstrap.Toast(toastEl);
+            });
+            toastList.forEach(toast => toast.show());
         }
 
         function endOrderSale() {
             order_items.value = (localStorage.getItem("items"));
-            if(order_items.value.length == 0) {
-                alert("erro ao finalizar pedido. É necessario inserir 1 produto no minimo. ");
-                return ;
+
+            if (order_items.value.length == 0) {
+                alert("Erro ao finalizar pedido. É necessario inserir 1 produto no minimo.");
+                return false;
             }
-            clearOrderSaleItems();
+
+            if (confirm('Tem certeza que deseja finalizar o pedido?')) {
+                clearOrderSaleItems();
+            } else {
+                return false;
+            }
         }
 
         function clearOrderSaleItems() {
             tblOrderBody.remove();
-            localStorage.clear();
-            items_order = [];   
+            localStorage.removeItem('items');
+            localStorage.removeItem('next_number');
+            items_order = [];
         }
 
         function clearOrderSaleTotalsItems() {
-            order_total.value = 0;     
-            order_total_tax.value = 0;  
-            clearOrderSaleItems()
+            if (!confirm('Tem certeza que deseja excluir todos os produtos do Pedido?')) {
+                return false;
+            }
+
+            updateTotalOrder();
+            clearOrderSaleItems();
+
+            return true;
         }
 
         function clearIncludeproduct() {
-            product_desc.value = "";
-            product_id.value = 0;
+            product_desc = "";
+            product_id = 0;
             product_item.selectedIndex = "0";
             quantity_item.value = 1;
             price_item.value = 0;
             total_item.value = 0;
-            total_tax_item.value = 0;   
+            total_tax_item.value = 0;
         }
-    
     </script>
 </body>
 </html>

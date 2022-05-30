@@ -35,18 +35,20 @@ class TypeProductFormList
     {
         try {
             Transaction::open(DATABASE);
-            $TypeProducts = TypeProduct::all();
+            $typeProducts = TypeProduct::all();
             Transaction::close();
 
             $items = '';
-            foreach ($TypeProducts as $TypeProduct) {     
+
+            foreach ($typeProducts as $typeProduct) {
                 $item = file_get_contents('View/item_type_product.html');
-                $item = str_replace('{id}', $TypeProduct['id'], $item);
-                $item = str_replace('{description}', $TypeProduct['description'], $item);
-                $item = str_replace('{tax_percentage}', $TypeProduct['tax_percentage'], $item); 
+                $item = str_replace('{id}', $typeProduct['id'], $item);
+                $item = str_replace('{description}', $typeProduct['description'], $item);
+                $item = str_replace('{tax_percentage}', $typeProduct['tax_percentage'], $item); 
                 $items .= $item;
             }
-            $this->data['product_list'] = $items;            
+
+            $this->data['product_list'] = $items;
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -74,10 +76,9 @@ class TypeProductFormList
         $this->html = str_replace('{description}', $this->data['description'], $this->html);
         $this->html = str_replace('{tax_percentage}', $this->data['tax_percentage'], $this->html); 
         $this->html = str_replace('{items}', $this->data['product_list'], $this->html);
-           
+
         echo $this->html;
     }
-    
 }
 
 

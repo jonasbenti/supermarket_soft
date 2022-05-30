@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Lista de pedido</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Lista de pedidos</title>
 </head>
 <body style="text-align:center">
-    <div id="appTable" class="table-responsive" height="100%" width="100%">
-    <div class="panel panel-primary">
-        <div class="panel-heading" style="text-align: center">Lista de pedidos</div>
+    <div>
+        <span class="d-block p-2 bg-primary text-white ">
+            <h4 class="d-flex justify-content-center">Lista de pedidos</h4>
+        </span>
     </div>
-    <button onclick="window.location='index.php?class=OrderSaleForm'" class="btn btn-success">
-        Criar pedido
-    </button>
-    <button onclick="window.location='index.php?class=InitList'" class="btn btn-info">
-        Voltar a tela inicial
-    </button>
-</div>
-<br>
-<table class="table table-striped table-bordered table-hover">
-<thead class="thead-dark">
-    <tr>
-    <td></td>
-    <td><b>Id</b></td>
-    <td><b>Data</b></td>
-    <td><b>V. Total</b></td>
-    <td><b>V. Total Imp.</b></td>
-    </tr>
-</thead>
-<tbody class="Table table-striped table-bordered table-hover">
-    {items}
-</tbody>        
-</table>
+    <div class="m-3 btn-group" role="group" aria-label="Basic mixed styles example">
+        <a class="btn btn-success" href="./index.php?class=OrderSaleForm" role="button">Novo pedido</a>
+        <a class="btn btn-primary" href="index.php" role="button">Voltar ao início</a>
+    </div>
+    <br>
+    <table class="table table-striped table-hover">
+        <thead class="table-primary">
+            <tr>
+            <td></td>
+            <td><b>Id</b></td>
+            <td><b>Data</b></td>
+            <td><b>V. Total</b></td>
+            <td><b>V. Total Imp.</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            {items}
+        </tbody>
+    </table>
 </body>
 </html>

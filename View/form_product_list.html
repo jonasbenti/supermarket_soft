@@ -1,70 +1,65 @@
-<!DOCTYPE html>
-
-<head>
-    <meta charset="UTF-8">
-    <title>Formulário de Produtos</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-    
-
-    <div class="panel panel-primary">
-        <div class="panel-heading" style="text-align: center">Formulário de Produtos <b>{id}</b></div>
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Formulário de produto {id}</title>
+  </head>
+  <body>
+    <div>
+        <span class="d-block p-2 bg-primary text-white ">
+            <h3 class="d-flex justify-content-center">Formulário de produto <b>{id}</b></h3>
+        </span>
     </div>
-    <form enctype="multipart/form-data"  method="post" action="index.php?class=ProductFormList&method=save">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <form method="post" action="index.php?class=ProductFormList&method=save">
+        <input id="id" name="id" type="hidden" value="{id}">
         <div class="container">
-            <input id="id" name="id" type="hidden" value="{id}">
-            <div class="form-group col-md-6">
-                <label>Descrição</label>
-                <input name="description" class="form-control" type="text" style="width: 50%"
-                value="{description}" required>
-                <br>
+            <div class="row">
+                <div class="col-md-4 position-relative">
+                    <label for="description" class="form-label"><b>Descrição</b></label>
+                    <input name="description" type="text" class="form-control" value="{description}"
+                    required oninvalid="this.setCustomValidity('Campo Descrição requerido')" onchange="try{setCustomValidity('')}catch(e){}">
+                </div>
+                <div class="col-md-2 position-relative">
+                    <label for="value" class="form-label"><b>Preço</b></label>
+                    <input name="value" type="text" class="form-control" value="{value}"
+                    required oninvalid="this.setCustomValidity('Campo Preço requerido')" onchange="try{setCustomValidity('')}catch(e){}">
+                </div>
+                <div class="col-md-4 position-relative">
+                    <label for="type_product_id" class="form-label"><b>Tipo do Produto</b></label>
+                    <select class="form-select" id="type_product_id" name="type_product_id" required>
+                        {combo_type_products}
+                    </select>
+                </div>
             </div>
-                
-            <div class="form-group col-md-3">
-                <label>Valor</label>
-                <input name="value" class="form-control" type="text" style="width: 50%"
-                value="{value}" required>
-                <br>
+        </div>
+        <div class="text-center">
+            <div class="m-3 btn-group" role="group" aria-label="Basic mixed styles example">
+                <input class="btn btn-success" type="submit" value="Incluir/Editar">
+                <a class="btn btn-danger" href="index.php?class=ProductFormList" role="button">Reset</a>
+                <a class="btn btn-primary" href="index.php" role="button">Voltar ao início</a>
             </div>
+        </div>
+    </form>
 
-            <div class="form-group col-md-3">
-                <label for="type_product_id">Tipo do Produto</label>
-                <select class="form-control" size="1" id="type_product_id" name="type_product_id">
-                    {combo_type_products}             
-                </select>
-                <br>
-            </div>  
-        </div>
-        <div id="panel_include" class="panel panel-primary">
-            <div class="panel-heading" style="text-align: center">Ações</div>
-        </div>     
-        <div class="container" style="text-align: center">
-            <a href="index.php?class=ProductFormList" class="btn btn-primary"> Novo Produto</a>
-            <input type="submit" class="btn btn-success" value="Incluir/Alterar">
-            <a href="index.php" class="btn btn-info"> Voltar ao Início</a>
-        </div>
-        <br>
-        <div id="panel_include" class="panel panel-primary">
-            <div class="panel-heading" style="text-align: center">Listagem de Produtos</div>
-        </div>
-    </form>    
-    <table class="table table-striped table-bordered table-hover">
-        <thead class="thead-dark">
-            <tr>
-            <td></td>
-            <td><b>Id</b></td>
-            <td><b>Descrição</b></td>
-            <td><b>Valor</b></td>
-            <td><b>Tipo de Produto</b></td>
-            </tr>
-        </thead>
-        <tbody class="Table table-striped table-bordered table-hover">
-            {items}
-        </tbody>        
-    </table>
-   
-</body>
+    <div class="container">
+        <table class="table table-striped table-hover caption-top">
+            <caption class="text-center"><h3>Lista de produtos</h3></caption>
+            <thead class="table-primary">
+                <tr>
+                    <td></td>
+                    <td><b>Id</b></td>
+                    <td><b>Descrição</b></td>
+                    <td><b>Preço</b></td>
+                    <td><b>Tipo de Produto</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                {items}
+            </tbody>
+        </table>
+    </div>
+  </body>
 </html>
