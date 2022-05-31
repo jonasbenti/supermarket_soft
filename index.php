@@ -1,7 +1,5 @@
 <?php
 
-define('DATABASE', 'supermarket_soft');
-
 function my_autoload($class)
 {
     $dir_src = './App/Controller/';
