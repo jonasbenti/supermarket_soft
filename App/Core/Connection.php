@@ -6,17 +6,12 @@ class Connection
 
     public static function open()
     {
-        if (file_exists(".env")) {
-            $db = parse_ini_file(".env");
-        } else {
-            throw new Exception("Arquivo .env não encontrado");
-        }
-        $dbuser = isset($db['dbuser']) ? $db['dbuser'] : null;
-        $dbpass = isset($db['dbpass']) ? $db['dbpass'] : null;
-        $dbname = isset($db['dbname']) ? $db['dbname'] : null;
-        $dbhost = isset($db['dbhost']) ? $db['dbhost'] : null;
-        $dbtype = isset($db['dbtype']) ? $db['dbtype'] : null;
-        $dbport = isset($db['dbport']) ? $db['dbport'] : 5432;
+        $dbuser = getenv('dbuser') ? getenv('dbuser') : null;
+        $dbpass = getenv('dbpass') ? getenv('dbpass') : null;
+        $dbname = getenv('dbname') ? getenv('dbname') : null;
+        $dbhost = getenv('dbhost') ? getenv('dbhost') : null;
+        $dbtype = getenv('dbtype') ? getenv('dbtype') : null;
+        $dbport = getenv('dbport') ? getenv('dbport') : 5432;
         $conn = new PDO("{$dbtype}:dbname={$dbname} host={$dbhost}", $dbuser, $dbpass);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
