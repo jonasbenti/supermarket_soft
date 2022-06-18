@@ -2,3 +2,4 @@ App/Config/supermarket_soft.ini
 App/Config/supermarket_soft_local.ini
 App/Config/supermarket_soft_heroku.ini
 .env
+App/Api
