@@ -3,3 +3,5 @@ App/Config/supermarket_soft_local.ini
 App/Config/supermarket_soft_heroku.ini
 .env
 App/Api
+composer.lock
+vendor

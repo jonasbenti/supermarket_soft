@@ -1,18 +1,34 @@
 <?php
 
-require_once 'App/Model/OrderSale.php';
-require_once 'App/Model/OrderSaleItem.php';
-require_once 'App/Model/Product.php';
+namespace App\SupermarketSoft\Controller;
+
+use Exception;
+use App\SupermarketSoft\Model\OrderSale;
+use App\SupermarketSoft\Core\Transaction;
+use App\SupermarketSoft\Model\OrderSaleItem;
+use App\SupermarketSoft\Helper\RenderizadorDeHtmlTrait;
 
 class OrderSaleForm
 {
-    private $html;
-    private $data;
+    use RenderizadorDeHtmlTrait;
+
+    /**
+     * Atributo responsavel por popular o pedido
+     *
+     * @var array
+     */
+    private array $dataOrder = [];
+
+    /**
+     * Atributo que instancia a classe do pedido
+     *
+     * @var OrderSale|null
+     */
+    private ?OrderSale $orderModel = null;
 
     public function __construct() 
     {
-        $this->html = file_get_contents('View/form_order_sale.html');
-        $this->data = [
+        $this->dataOrder = [
             'id' => '',
             'order_date' => date('d/m/Y'),
             'order_total' => '0',
@@ -20,90 +36,75 @@ class OrderSaleForm
             'combo_products' => '',
             'order_items' => []
         ];
+
+        $this->orderModel = new OrderSale();
     }
 
-    public function edit($param)
-    {
-        try {
-            $order_id = (int) $param['id'];
-            Transaction::open();
-            $products = Product::all();
-            $this->data = OrderSale::find($order_id); 
-            $this->data['order_items'] = OrderSaleItem::findByOrderSale($order_id);
-            Transaction::close();
-
-            $select_products = "<option selected=1 value='0'> Selecione um Produto </option>";
-            foreach ($products as $product) {
-                $values_product = $product['id']."_|_".$product['description']."_|_".$product['value']."_|_".$product['tax_percetage'];
-                $description = $product['description'];
-                $select_products .= "<option value='{$values_product}'> {$description} </option>";
-            }
-
-            $this->data['combo_products'] = $select_products;
-            $order_date = date_create($this->data['order_date']);
-            $this->data['order_date'] = date_format($order_date,'d/m/Y');
-
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-    }
-
-    public function load()
+    /**
+     * Busca os dados do pedido e os itens que pertencem ao pedido
+     *
+     * @param integer $id - id do pedido
+     * @return array
+     */
+    public function find(int $id): array
     {
         try {
             Transaction::open();
-            $products = Product::all();
+            $data = $this->orderModel->find($id);
+            $orderItems = new OrderSaleItem();
+            $data['order_items'] = $orderItems->findByOrderSale($id);
             Transaction::close();
 
-            $select_products = "<option selected=1 value=''> Selecione um Produto </option>";
-
-            foreach ($products as $product) {
-                $values_product = $product['id'];
-                $description = $product['description']." - imp: (".(str_replace(".",",",$product['tax_percetage'])."%)");
-                $select_products .= "<option value='{$values_product}' data-price='{$product['value']}' data-tax_percentage='{$product['tax_percetage']}'> {$description} </option>";
-            }
-
-            $this->data['combo_products'] = $select_products;
+            return $data;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            die($e->getMessage());
         }
     }
 
-    public function save($param)
+    /**
+     * Metodo responsavel por validar os inputs e exibir
+     * o formulario e a lista de tipos de produto
+     *
+     * @return void
+     */
+    public function processReq(): void
     {
-        try {
-            $order_sale_items = json_decode($param['order_items'], true);
-            $order_sale = [
-                'order_date' => $param['order_date'], 
-                'order_total' => $param['order_total'], 
-                'order_total_tax' => $param['order_total_tax']
-            ];
+        $id = filter_input(
+            INPUT_GET,
+            'id',
+            FILTER_VALIDATE_INT
+        );
 
-            Transaction::open();
-            $order_sale_id = OrderSale::save($order_sale);
+        $title = 'Inserir pedido';
+        $title2 = 'Inserir produto(Item)';
+        $buttonText = 'Inserir';
+        $buttonType = 'success';
+        $productList = [];
 
-            foreach ($order_sale_items as $order_sale_item) {
-                OrderSaleItem::save($order_sale_item, $order_sale_id);
-            }
-
-            Transaction::close();
-            $this->data = $param;
-            header("Location: index.php?class=OrderSaleList");
-        } catch (Exception $e) {
-            echo $e->getMessage();
+        if ($id) {
+            $this->dataOrder = $this->find($id);
+            $title = "Editar pedido ID: $id";
+            $buttonText = "Editar ID: $id";
+            $buttonType = "primary";
+        } else {
+            $product = new ProductFormList();
+            $productList = $product->list();
         }
-    }
 
-    public function show()
-    {
-        $this->load();
-        $this->html = file_get_contents('View/form_order_sale.html');
-        $this->html = str_replace('{order_id}', isset($this->data['id']) ? $this->data['id'] : '', $this->html);
-        $this->html = str_replace('{order_date}', $this->data['order_date'], $this->html);
-        $this->html = str_replace('{order_total}', $this->data['order_total'], $this->html);
-        $this->html = str_replace('{order_total_tax}', $this->data['order_total_tax'], $this->html);
-        $this->html = str_replace('{combo_products}', $this->data['combo_products'], $this->html);
-        $this->html = str_replace('{array_order_items}', json_encode($this->data['order_items']), $this->html);
-        echo $this->html;
+        echo $this->renderizaHtml(
+            'order_sale/form_order_sale.php',
+            [
+                'title' => $title,
+                'title2' => $title2,
+                'button_text' => $buttonText,
+                'button_type' => $buttonType,
+                'id' => $this->dataOrder['id'],
+                'order_date' => $this->dataOrder['order_date'],
+                'order_total' => $this->dataOrder['order_total'],
+                'order_total_tax' => $this->dataOrder['order_total_tax'],
+                'order_items' => json_encode($this->dataOrder['order_items']),
+                'products' => $productList
+            ]
+        );
     }
 }

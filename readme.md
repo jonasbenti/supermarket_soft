@@ -13,15 +13,8 @@
 - Importar o dump que está na raiz do projeto;
 - Renomear o arquivo .env.sample para .env com as configrações da sua base de dados;
 
-# Melhorias realizadas 2.0
-- Atualizar a bootstrap para versão 5.
-- Novo visual;
-- Corregir bugs e melhorar validações dos formularios;
-- Melhorias de layout;
-- Editar itens do pedido;
-- Melhorias no codigo JS e Html;
-
-# Melhorias futuras
-- Validar melhor as informações inseridas nos Forms;
-- Criar testes automatizados;
-- Criar API;
+# Melhorias realizadas 2.1
+- Utilização de OO e traits;
+- Melhorias visuais;
+- Utilização da PSR4 e Roteamento;
+- Melhor aproveitamento de codigo;
