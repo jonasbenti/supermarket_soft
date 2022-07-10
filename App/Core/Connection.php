@@ -1,17 +1,25 @@
 <?php
 
+namespace App\SupermarketSoft\Core;
+
+use PDO;
+
 class Connection
 {
     private function __construct() {}
 
-    public static function open()
+    /**
+     * Abre a conexao com o banco de dados
+     *
+     * @return PDO
+     */
+    public static function open(): PDO
     {
         $dbuser = getenv('dbuser') ? getenv('dbuser') : null;
         $dbpass = getenv('dbpass') ? getenv('dbpass') : null;
         $dbname = getenv('dbname') ? getenv('dbname') : null;
         $dbhost = getenv('dbhost') ? getenv('dbhost') : null;
         $dbtype = getenv('dbtype') ? getenv('dbtype') : null;
-        $dbport = getenv('dbport') ? getenv('dbport') : 5432;
         $conn = new PDO("{$dbtype}:dbname={$dbname} host={$dbhost}", $dbuser, $dbpass);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 

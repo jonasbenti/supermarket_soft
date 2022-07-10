@@ -1,70 +1,34 @@
 <?php
 
-require_once "App/Core/Transaction.php";
+namespace App\SupermarketSoft\Model;
 
-class OrderSaleItem
+use PDO;
+use Exception;
+use App\SupermarketSoft\Core\Transaction;
+
+class OrderSaleItem extends ModelBase
 {
-    public static function find($id)
+    /**
+     * Define a tabela que sera utilizada para executar os metodo da classe pai
+     */
+    public function __construct()
     {
-        if ($conn = Transaction::get()) {
-            $result = $conn->prepare("select * from order_sale_item WHERE id= :id");
-            $result->execute([':id' => $id]);
-
-            return $result->fetch(PDO::FETCH_ASSOC);
-        } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
-        }
+        parent::__construct("order_sale_item");
     }
 
-    public static function findByOrderSale($order_sale_id)
+    /**
+     * Busca todos os itens que pertencem ao pedido
+     *
+     * @param integer $order_sale_id
+     * @return array
+     */
+    public function findByOrderSale(int $order_sale_id): array
     {
         if ($conn = Transaction::get()) {
-            $result = $conn->prepare("select * from order_sale_item WHERE order_sale_id= :order_sale_id");
+            $result = $conn->prepare("select * from {$this->getTable()} WHERE order_sale_id = :order_sale_id");
             $result->execute([':order_sale_id' => $order_sale_id]);
 
             return $result->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
-        }
-    }
-
-    public static function delete($id)
-    {
-        if ($conn = Transaction::get()) {
-            $result = $conn->prepare("DELETE from order_sale_item WHERE id= :id");
-            $result->execute([':id' => $id]);
-
-            return $result;
-        } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
-        }
-    }
-
-    public static function all()
-    {
-        if ($conn = Transaction::get()) { 
-            $result = $conn->query("select * from order_sale_item ORDER BY id desc");
-
-            return $result->fetchAll(PDO::FETCH_ASSOC);
-        } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
-        }
-    }
-
-    public static function save($order_sale_item, $order_sale_id)
-    {
-        if ($conn = Transaction::get()) {
-            foreach ($order_sale_item as $key => $value) {
-                $order_sale_item[$key] = strip_tags(addslashes($value));
-            }
-
-            $order_sale_item['order_sale_id'] = $order_sale_id;
-            $keys_insert = implode(", ",array_keys($order_sale_item));
-            $values_insert = "'".implode("', '",array_values($order_sale_item))."'";
-            $sql = "INSERT INTO order_sale_item ($keys_insert) VALUES ($values_insert)";
-            $result = $conn->query($sql);
-
-            return $result;
         } else {
             throw new Exception('Não há transação ativa!!'.__FUNCTION__);
         }

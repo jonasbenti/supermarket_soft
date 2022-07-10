@@ -3,11 +3,11 @@
 namespace App\SupermarketSoft\Controller;
 
 use Exception;
-use App\SupermarketSoft\Model\Product;
 use App\SupermarketSoft\Core\Transaction;
 use App\SupermarketSoft\Helper\RenderizadorDeHtmlTrait;
+use App\SupermarketSoft\Model\TypeProduct;
 
-class ProductFormList
+class ProductTypeFormList
 {
     use RenderizadorDeHtmlTrait;
 
@@ -16,47 +16,50 @@ class ProductFormList
      *
      * @var array
      */
-    private array $dataProduct = [];
-    /**
-     * Atributo que instancia a classe de produto
-     *
-     * @var Product|null
-     */
-    private ?Product $ProductModel = null;
+    private array $dataProductType = [];
 
+    /**
+     * Atributo que instancia a classe do tipo de produto
+     *
+     * @var TypeProduct|null
+     */
+    private ?TypeProduct $typeProductModel = null;
+
+    /**
+     * Popula os atributos da classe
+     */
     public function __construct() 
     {
-        $this->dataProduct = [
+        $this->dataProductType = [
             'id' => '',
             'description' => '',
-            'value' => '',
-            'type_product_id' => ''
+            'tax_percentage' => ''
         ];
 
-        $this->productModel = new Product();
+        $this->typeProductModel = new TypeProduct();
     }
 
     /**
-     * Busca as informacoes do registro pelo id
+     * Busca as informacoes dos registros a serem editados
      *
      * @param integer $id
-     * @return array
+     * @return array dados de um tipo de produto
      */
     public function find(int $id): array
     {
         try {
             Transaction::open();
-            $data = $this->productModel->find($id);
+            $dataProductType = $this->typeProductModel->find($id);
             Transaction::close();
 
-            return $data;
+            return $dataProductType;
         } catch (Exception $e) {
             die($e->getMessage());
         }
     }
 
     /**
-     * Lista com todos os produtos
+     * Carrega a lista com todos os tipos de produto
      *
      * @return array
      */
@@ -64,7 +67,7 @@ class ProductFormList
     {
         try {
             Transaction::open();
-            $list = $this->productModel->all();
+            $list = $this->typeProductModel->all();
             Transaction::close();
 
             return $list;
@@ -81,10 +84,7 @@ class ProductFormList
      */
     public function processReq(): void
     {
-        $typeProduct = new ProductTypeFormList();
-        $typeProductList = $typeProduct->list();
-
-        $productList = $this->list();
+        $productTypesList = $this->list();
 
         $id = filter_input(
             INPUT_GET,
@@ -92,29 +92,27 @@ class ProductFormList
             FILTER_VALIDATE_INT
         );
 
-        $title = 'Inserir produto';
+        $title = 'Inserir tipo de produto';
         $buttonText = 'Inserir';
         $buttonType = 'success';
 
         if ($id) {
-            $this->dataProduct = $this->find($id);
-            $title = "Editar produto ID: $id";
+            $this->dataProductType = $this->find($id);
+            $title = "Editar tipo de produto ID: $id";
             $buttonText = "Editar ID: $id";
             $buttonType = "primary";
         }
 
         echo $this->renderizaHtml(
-            'product/form_list_product.php',
+            'product_type/form_list_product_type.php',
             [
                 'title' => $title,
                 'button_text' => $buttonText,
                 'button_type' => $buttonType,
-                'id' => $this->dataProduct['id'],
-                'description' => $this->dataProduct['description'],
-                'value' => $this->dataProduct['value'],
-                'product_type_id' => $this->dataProduct['type_product_id'],
-                'products' => $productList,
-                'product_types' => $typeProductList,
+                'id' => $this->dataProductType['id'],
+                'description' => $this->dataProductType['description'],
+                'tax_percentage' => $this->dataProductType['tax_percentage'],
+                'product_types' => $productTypesList,
             ]
         );
     }

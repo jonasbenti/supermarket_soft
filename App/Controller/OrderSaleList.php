@@ -1,43 +1,57 @@
 <?php
 
-require_once 'App/Model/OrderSale.php';
+namespace App\SupermarketSoft\Controller;
+
+use Exception;
+use App\SupermarketSoft\Core\Transaction;
+use App\SupermarketSoft\Model\OrderSale;
+use App\SupermarketSoft\Helper\RenderizadorDeHtmlTrait;
 
 class OrderSaleList
 {
-    private $html;
+    use RenderizadorDeHtmlTrait;
 
-    public function __construct()
-    {
-        $this->html = file_get_contents('View/list_order_sale.html');
-    }
-
-    public function load()
+    /**
+     * Carrega a lista com todos os pedidos
+     *
+     * @return array
+     */
+    public function list(): array
     {
         try {
             Transaction::open();
-            $order_sales = OrderSale::all();
+            $ordersSalesModel = new OrderSale();
+            $list = $ordersSalesModel->all();
             Transaction::close();
-            $items = '';
 
-            foreach ($order_sales as $order_sale) {
-                $order_date = date_create($order_sale['order_date']); 
-                $item = file_get_contents('View/item_order_sale.html');
-                $item = str_replace('{order_id}', $order_sale['id'], $item);
-                $item = str_replace('{order_date}', date_format($order_date,"d/m/Y"), $item);
-                $item = str_replace('{order_total}', $order_sale['order_total'], $item);
-                $item = str_replace('{order_total_tax}', $order_sale['order_total_tax'], $item);
-                $items .= $item;
-            }
-
-            $this->html = str_replace('{items}', $items, $this->html);
+            return $list;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            die($e->getMessage());
         }
     }
 
-    public function show()
+     /**
+     * Metodo responsavel por validar os inputs e exibir
+     * o formulario e a lista de tipos de produto
+     *
+     * @return void
+     */
+    public function processReq(): void
     {
-        $this->load();
-        echo $this->html;
+        $ordersSalesList = $this->list();
+
+        $title = 'Lista de pedidos';
+        $buttonText = 'Novo Pedido';
+        $buttonType = 'success';
+
+        echo $this->renderizaHtml(
+            'order_sale/list_order_sale.php',
+            [
+                'title' => $title,
+                'button_text' => $buttonText,
+                'button_type' => $buttonType,
+                'sales_orders' => $ordersSalesList,
+            ]
+        );
     }
 }

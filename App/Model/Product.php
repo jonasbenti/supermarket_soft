@@ -1,79 +1,59 @@
 <?php
 
-require_once "App/Core/Transaction.php";
+namespace App\SupermarketSoft\Model;
 
-class Product
+use PDO;
+use Exception;
+use App\SupermarketSoft\Core\Transaction;
+
+class Product extends ModelBase
 {
-    public static function find($id)
+    /**
+     * Define a tabela que sera utilizada para executar os metodo da classe pai
+     */
+    public function __construct()
+    {
+        parent::__construct("product");
+    }
+
+    /**
+     * Realiza a busca de 1 produto com a informacao do imposto
+     *
+     * @param int $id
+     * @return array
+     */
+    public function find(int $id): array
     {
         if ($conn = Transaction::get()) {
-            $result = $conn->prepare("select p.*, tp.tax_percentage as tax_percetage from product p 
+            $result = $conn->prepare("select p.*, tp.tax_percentage as tax_percetage
+            from {$this->getTable()} p 
             inner join type_product tp ON tp.id = p.type_product_id
             WHERE p.id= :id");
             $result->execute([':id' => $id]);
 
             return $result->fetch(PDO::FETCH_ASSOC);
         } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
+            throw new Exception('Nao ha transaçao ativa!!'.__FUNCTION__);
         }
     }
 
-    public static function delete($id)
-    {
-        if ($conn = Transaction::get()) {
-            $result = $conn->prepare("DELETE from product WHERE id= :id");
-            $result->execute([':id' => $id]);
-
-            return $result;
-        } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
-        }
-    }
-
-    public static function all()
+    /**
+     * Realiza a busca de todos os produtos
+     * Retorna descricao e imposto do tipo de produto junto
+     *
+     * @return array
+     */
+    public function all(): array
     {
         if ($conn = Transaction::get()) { 
-            $result = $conn->query("select p.*, tp.tax_percentage as tax_percetage, tp.description as type_product from product p 
+            $result = $conn->query("select p.*, tp.tax_percentage as tax_percetage, tp.description as type_product
+            from {$this->getTable()} p 
             inner join type_product tp ON tp.id = p.type_product_id
             order by id desc");
 
             return $result->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
-        }
-    }
-
-    public static function save($product)
-    {
-        if ($conn = Transaction::get()) {
-            foreach ($product as $key => $value) {
-                $product[$key] = strip_tags(addslashes($value));
-            }
-
-            $id = isset($product['id']) ? $product['id'] : 0;
-            unset($product['id']);
-            unset($product['class']);
-            unset($product['method']);
-
-            if (empty($id)) {
-                $keys_insert = implode(", ",array_keys($product));
-                $values_insert = "'".implode("', '",array_values($product))."'";
-                $sql = "INSERT INTO product ($keys_insert) VALUES ($values_insert)";
-            } else {
-                $set = [];
-
-                foreach ($product as $column => $value) {
-                    $set[] = "$column = '$value'";
-                }
-
-                $set_update = implode(", ", $set);
-                $sql = "UPDATE product SET $set_update, updated_at = now() WHERE id = '$id'";
-            }
-            $result = $conn->query($sql);
-
-            return $result;
-        } else {
-            throw new Exception('Não há transação ativa!!'.__FUNCTION__);
+            throw new Exception('Nao ha transaçao ativa!!'.__FUNCTION__);
         }
     }
 }
