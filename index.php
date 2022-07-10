@@ -2,8 +2,7 @@
 
 require 'vendor/autoload.php';
 
-// Valida se existe a REDIRECT_URL(HEROKU), caso nao exista utiliza a PATH_INFO (Localhost)
-$path = isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : $_SERVER['PATH_INFO'];
+$path = isset($_SERVER['REDIRECT_URL']) ? $_SERVER['REDIRECT_URL'] : '/home';
 
 $routes = require 'Config/routes.php';
 

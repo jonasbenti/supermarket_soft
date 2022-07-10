@@ -10,7 +10,6 @@ use App\SupermarketSoft\Controller\ProductTypeSave;
 use App\SupermarketSoft\Controller\ProductTypeFormList;
 
 return [
-    '/' => Home::class,
     '/home' => Home::class,
     '/product-type' => ProductTypeFormList::class,
     '/product-type-save' => ProductTypeSave::class,
