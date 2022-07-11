@@ -1,6 +1,6 @@
 </div>
 </body>
-<footer class="text-center text-white navbar-fixed-bottom" style="background-color:#0D6EFD;">
+<footer class="text-center text-white fixed-bottom" style="background-color:#0D6EFD;">
     <!-- Grid container -->
     <div class="container p-2">
         Copyright ©
