@@ -17,7 +17,7 @@
                 <a class="navbar-brand" href="/order-sale">Pedidos</a>
             </div>
         </nav>
-        <div class="container">
+        <div class="container mb-5">
             <div class="card bg-<?= $button_type; ?> text-white mb-2" style="border-radius: 25px;">
                 <div class="card-body">
                     <h2 class="card-title text-center">SupermarketSoft: <?= $title; ?></h2>
